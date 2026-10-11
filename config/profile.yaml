@@ -1,0 +1,109 @@
+# Your Profile Configuration
+# Fill this out with your details for AI matching and auto-filling
+
+personal:
+  full_name: "Aditya Srivastava"
+  email: "adityasrivastava8888@gmail.com"
+  phone: "+91-9584430985"
+  location: "Gurugram, Haryana, India"
+  linkedin_url: "https://www.linkedin.com/in/aditya-srivastava-6a23e"
+  github_url: "https://github.com/aditya9a"
+  portfolio_url: ""  # Optional
+
+# Job Preferences
+preferences:
+  # Role types to search for
+  roles:
+    - "Software Engineer"
+    - "Software Developer"
+    - "Backend Developer"
+    - "Full Stack Developer"
+    - "Frontend Developer"
+    - "SDE Intern"
+
+  # Experience level
+  experience_level:
+    - "entry"       # 0-2 years
+    - "internship"  # Internships
+
+  # Experience filter (in years) - strictly filter jobs outside this range
+  min_experience_years: 0
+  max_experience_years: 2
+
+  # Location preferences
+  locations:
+    - "Remote"
+    - "Bangalore"
+    - "Hyderabad"
+    - "Pune"
+    - "Mumbai"
+    - "Delhi NCR"
+
+  # Minimum salary (annual, in INR lakhs) — 0 to ignore
+  min_salary_lpa: 0
+
+  # Skills you have (used for AI matching)
+  skills:
+    # Languages
+    - "Java"
+    - "Python"
+    - "SQL"
+    - "JavaScript"
+    # Web Development
+    - "React"
+    - "Node.js"
+    - "Express"
+    - "HTML5"
+    - "CSS3"
+    - "Bootstrap"
+    # Databases & Storage
+    - "MySQL"
+    - "MongoDB"
+    - "Redis"
+    # Cloud & DevOps
+    - "AWS"
+    - "EC2"
+    - "S3"
+    - "Lambda"
+    - "CloudWatch"
+    - "Linux"
+    - "Docker"
+    # Tools & Platforms
+    - "Git"
+    - "GitHub"
+    - "Power BI"
+    # Core Concepts & CS Fundamentals
+    - "Object-Oriented Programming (OOP)"
+    - "Data Structures & Algorithms (DSA)"
+    - "Microservices"
+    - "SDLC"
+    - "Agile"
+    - "Unit Testing"
+    - "Query Optimization"
+
+  # Keywords to EXCLUDE (jobs containing these are filtered out)
+  exclude_keywords:
+    - "Senior"
+    - "Lead"
+    - "Principal"
+    - "Staff"
+    - "10+ years"
+
+  # Minimum match score (0-100) to show in dashboard
+  min_match_score: 50
+
+# Resume
+resume:
+  # Path to your resume PDF
+  path: "config/resume.pdf"
+  # One-line summary of your experience (used by AI)
+  summary: "Full-Stack Software Engineer skilled in React, Node.js, Express, Python, Java, MongoDB, SQL, and AWS. Experience building AI-native microservices, REST APIs, and responsive web applications."
+
+# Application defaults (used when auto-filling forms)
+application_defaults:
+  cover_letter_style: "concise"  # concise | detailed
+  willing_to_relocate: true
+  notice_period: "Immediate"
+  expected_ctc: "As per industry standards"
+  current_ctc: "N/A"  # or your current CTC
+  years_of_experience: 0

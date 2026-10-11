@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobPilot — Smart Job Application Dashboard</title>
+    <meta name="description" content="Track, filter, and manage your automated job applications across multiple platforms.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <!-- Animated background -->
+    <div class="bg-gradient"></div>
+    <div class="bg-grid"></div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo">
+                <span class="logo-icon">🚀</span>
+                <span class="logo-text">JobPilot</span>
+            </div>
+            <span class="version-badge">v0.1</span>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active" data-view="dashboard" id="nav-dashboard">
+                <span class="nav-icon">📊</span>
+                <span class="nav-label">Dashboard</span>
+            </a>
+            <a href="#" class="nav-item" data-view="jobs" id="nav-jobs">
+                <span class="nav-icon">💼</span>
+                <span class="nav-label">All Jobs</span>
+                <span class="nav-badge" id="jobs-count-badge">0</span>
+            </a>
+            <a href="#" class="nav-item" data-view="shortlisted" id="nav-shortlisted">
+                <span class="nav-icon">⭐</span>
+                <span class="nav-label">Shortlisted</span>
+            </a>
+            <a href="#" class="nav-item" data-view="applied" id="nav-applied">
+                <span class="nav-icon">✅</span>
+                <span class="nav-label">Applied</span>
+            </a>
+            <a href="#" class="nav-item" data-view="history" id="nav-history">
+                <span class="nav-icon">📜</span>
+                <span class="nav-label">Scrape History</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-actions">
+            <button class="btn btn-primary btn-full" id="btn-scrape" onclick="triggerScrape()">
+                <span>🔍</span> Scrape Now
+            </button>
+            <button class="btn btn-secondary btn-full" id="btn-match" onclick="triggerMatch()">
+                <span>🤖</span> AI Match
+            </button>
+            <button class="btn btn-full" id="btn-apply" onclick="triggerAutoApply()" style="background: linear-gradient(135deg, #10b981, #059669); color: white; margin-top: 8px;">
+                <span>🚀</span> Auto Apply
+            </button>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content" id="main-content">
+
+        <!-- Top Bar -->
+        <header class="topbar">
+            <div class="topbar-left">
+                <button class="menu-toggle" id="menu-toggle" onclick="toggleSidebar()">☰</button>
+                <h1 class="page-title" id="page-title">Dashboard</h1>
+            </div>
+            <div class="topbar-right">
+                <div class="search-box">
+                    <input type="text" id="search-input" placeholder="Search jobs..." onkeyup="handleSearch(event)">
+                    <span class="search-icon">🔎</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard View -->
+        <section class="view active" id="view-dashboard">
+            <!-- Stats Cards -->
+            <div class="stats-grid" id="stats-grid">
+                <div class="stat-card stat-card-primary">
+                    <div class="stat-icon">💼</div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="stat-total">0</span>
+                        <span class="stat-label">Total Jobs</span>
+                    </div>
+                </div>
+                <div class="stat-card stat-card-success">
+                    <div class="stat-icon">🆕</div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="stat-today">0</span>
+                        <span class="stat-label">New Today</span>
+                    </div>
+                </div>
+                <div class="stat-card stat-card-warning">
+                    <div class="stat-icon">🎯</div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="stat-avg-score">0%</span>
+                        <span class="stat-label">Avg Match Score</span>
+                    </div>
+                </div>
+                <div class="stat-card stat-card-info">
+                    <div class="stat-icon">✅</div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="stat-applied">0</span>
+                        <span class="stat-label">Applied</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Platform Breakdown -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>📊 Platform Breakdown</h2>
+                </div>
+                <div class="card-body">
+                    <div class="platform-bars" id="platform-bars">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top Matches -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>🎯 Top Matches</h2>
+                    <a href="#" class="card-link" onclick="switchView('jobs')">View All →</a>
+                </div>
+                <div class="card-body">
+                    <div class="job-list" id="top-matches-list">
+                        <!-- Filled by JS -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Jobs View -->
+        <section class="view" id="view-jobs">
+            <div class="filter-bar">
+                <select id="filter-platform" onchange="loadJobs()">
+                    <option value="all">All Platforms</option>
+                    <option value="cutshort">Cutshort</option>
+                    <option value="wellfound">Wellfound</option>
+                    <option value="hirist">Hirist</option>
+                    <option value="linkedin">LinkedIn</option>
+                </select>
+                <select id="filter-status" onchange="loadJobs()">
+                    <option value="all">All Statuses</option>
+                    <option value="new">New</option>
+                    <option value="matched">Matched</option>
+                    <option value="shortlisted">Shortlisted</option>
+                    <option value="applied">Applied</option>
+                    <option value="rejected">Rejected</option>
+                </select>
+                <select id="filter-min-score" onchange="loadJobs()">
+                    <option value="">Any Score</option>
+                    <option value="80">80%+</option>
+                    <option value="70">70%+</option>
+                    <option value="60">60%+</option>
+                    <option value="50">50%+</option>
+                </select>
+            </div>
+            <div class="job-table-container">
+                <table class="job-table" id="job-table">
+                    <thead>
+                        <tr>
+                            <th>Score</th>
+                            <th>Title</th>
+                            <th>Company</th>
+                            <th>Platform</th>
+                            <th>Location</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="job-table-body">
+                        <!-- Filled by JS -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Shortlisted View -->
+        <section class="view" id="view-shortlisted">
+            <div class="job-list" id="shortlisted-list"></div>
+        </section>
+
+        <!-- Applied View -->
+        <section class="view" id="view-applied">
+            <div class="job-list" id="applied-list"></div>
+        </section>
+
+        <!-- History View -->
+        <section class="view" id="view-history">
+            <div class="card">
+                <div class="card-header"><h2>📜 Scrape History</h2></div>
+                <div class="card-body">
+                    <table class="job-table" id="history-table">
+                        <thead>
+                            <tr>
+                                <th>Platform</th>
+                                <th>Found</th>
+                                <th>New</th>
+                                <th>Duplicates</th>
+                                <th>Status</th>
+                                <th>Time</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-table-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Job Detail Modal -->
+        <div class="modal-overlay" id="job-modal" onclick="closeModal(event)">
+            <div class="modal" onclick="event.stopPropagation()">
+                <button class="modal-close" onclick="closeJobModal()">✕</button>
+                <div class="modal-body" id="modal-body">
+                    <!-- Filled by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Toast Container -->
+        <div class="toast-container" id="toast-container"></div>
+
+    </main>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>

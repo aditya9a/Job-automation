@@ -1,0 +1,53 @@
+# Platform-specific configuration
+
+platforms:
+  cutshort:
+    enabled: true
+    base_url: "https://cutshort.io"
+    search_url: "https://cutshort.io/jobs"
+    max_pages: 5
+    delay_seconds: 3
+    # Search filters applied on the platform
+    filters:
+      experience: "0-2"
+      job_type: "full_time"
+
+  wellfound:
+    enabled: true
+    base_url: "https://wellfound.com"
+    search_url: "https://wellfound.com/jobs"
+    max_pages: 5
+    delay_seconds: 4
+    filters:
+      role: "Engineering"
+      location: "India"
+
+  hirist:
+    enabled: true
+    base_url: "https://www.hirist.tech"
+    search_url: "https://www.hirist.tech/jobs"
+    max_pages: 5
+    delay_seconds: 3
+    filters:
+      experience: "0-2"
+
+  linkedin:
+    enabled: true
+    base_url: "https://www.linkedin.com"
+    search_url: "https://www.linkedin.com/jobs/search/"
+    max_pages: 3
+    delay_seconds: 5
+    # LinkedIn-specific settings
+    easy_apply_only: true
+    filters:
+      experience_level: "1"  # Entry level
+      job_type: "F"          # Full-time
+      f_AL: true             # Easy Apply filter
+
+# Global scraping settings
+scraping:
+  headless: true              # Run browser in headless mode
+  user_agent_rotation: true   # Rotate user agents
+  screenshot_on_error: true   # Take screenshot when errors occur
+  max_retries: 3              # Max retries per page
+  timeout_seconds: 30         # Page load timeout
