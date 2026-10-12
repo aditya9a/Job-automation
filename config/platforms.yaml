@@ -5,8 +5,9 @@ platforms:
     enabled: true
     base_url: "https://cutshort.io"
     search_url: "https://cutshort.io/jobs"
-    max_pages: 5
-    delay_seconds: 3
+    max_pages: 3
+    max_jobs: 300
+    delay_seconds: 1
     # Search filters applied on the platform
     filters:
       experience: "0-2"

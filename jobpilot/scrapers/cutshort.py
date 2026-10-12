@@ -5,7 +5,7 @@ Scrapes job listings from cutshort.io using Playwright.
 
 import logging
 import re
-from typing import List
+from typing import List, Optional
 from urllib.parse import urlencode
 
 from .base import BaseScraper
@@ -21,23 +21,30 @@ class CutshortScraper(BaseScraper):
 
     # Verified category URLs for Cutshort (filtered by 0-2 yrs in post-processing)
     TARGET_URLS = [
+        "https://cutshort.io/jobs/internship-jobs",
+        "https://cutshort.io/jobs/remote-web-development-jobs",
+        "https://cutshort.io/jobs/remote-frontend-developer-jobs",
+        "https://cutshort.io/jobs/remote-reactjs-jobs",
+        "https://cutshort.io/jobs/remote-nodejs-jobs",
+        "https://cutshort.io/jobs/remote-python-jobs",
+        "https://cutshort.io/jobs/remote-java-jobs",
+        "https://cutshort.io/jobs/remote-javascript-jobs",
+        "https://cutshort.io/jobs/frontend-developer-jobs",
         "https://cutshort.io/jobs/fullstack-developer-jobs",
         "https://cutshort.io/jobs/backend-developer-jobs",
-        "https://cutshort.io/jobs/frontend-developer-jobs",
-        "https://cutshort.io/jobs/junior-developer-jobs",
-        "https://cutshort.io/jobs/software-development-intern-jobs",
     ]
 
     async def scrape_jobs(self) -> List[Job]:
         """Scrape jobs from Cutshort across startup directory endpoints."""
         jobs = []
-        max_jobs = self.platform_config.get("max_jobs", 50)
+        max_jobs = self.platform_config.get("max_jobs", 300)
+        global_seen_urls = set()
 
         for target_url in self.TARGET_URLS:
             if len(jobs) >= max_jobs:
                 break
 
-            for page_num in range(1, min(self.max_pages + 1, 3)):
+            for page_num in range(1, self.max_pages + 1):
                 url = target_url if page_num == 1 else f"{target_url}?page={page_num}"
                 try:
                     logger.info(f"[cutshort] Scraping page {page_num}: {url}")
@@ -51,12 +58,12 @@ class CutshortScraper(BaseScraper):
                         logger.warning(f"[cutshort] No job links found on {url}")
                         break
 
-                    page_jobs = await self._extract_jobs_from_page()
+                    page_jobs = await self._extract_jobs_from_page(global_seen_urls)
                     if not page_jobs:
                         break
 
                     jobs.extend(page_jobs)
-                    logger.info(f"[cutshort] Found {len(page_jobs)} jobs on {url}")
+                    logger.info(f"[cutshort] Found {len(page_jobs)} new jobs on {url} (Total so far: {len(jobs)})")
 
                     if len(jobs) >= max_jobs:
                         break
@@ -67,7 +74,7 @@ class CutshortScraper(BaseScraper):
 
         return jobs
 
-    async def _extract_jobs_from_page(self) -> List[Job]:
+    async def _extract_jobs_from_page(self, seen_urls: Optional[set] = None) -> List[Job]:
         """Extract job data from the current page."""
         raw_cards = await self.page.evaluate('''() => {
             const links = Array.from(document.querySelectorAll('a[href*="/job/"]'));
@@ -95,7 +102,8 @@ class CutshortScraper(BaseScraper):
         }''')
 
         jobs = []
-        seen_urls = set()
+        if seen_urls is None:
+            seen_urls = set()
 
         for r in raw_cards:
             url = r.get("url", "")

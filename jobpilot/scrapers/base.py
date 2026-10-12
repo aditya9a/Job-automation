@@ -142,9 +142,10 @@ class BaseScraper(ABC):
         # Build include keywords from target roles (only for cutshort where sidebar noise is high)
         include_role_keywords = [kw.lower() for kw in [
             "software", "developer", "engineer", "fullstack", "full stack", "full-stack",
-            "backend", "frontend", "web developer", "sde", "swe", "react", "node",
+            "backend", "frontend", "web developer", "web development", "sde", "swe", "react", "node",
             "python", "java", "technical", "devops", "cloud", "data engineer",
-            "mobile", "android", "ios", "api", "microservice",
+            "mobile", "android", "ios", "api", "microservice", "intern", "internship",
+            "trainee", "programmer"
         ]]
 
         for job in jobs:

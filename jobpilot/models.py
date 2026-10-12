@@ -186,6 +186,10 @@ def is_experience_eligible(exp_str: str, min_allowed: float = 0.0, max_allowed: 
         return False, f"Min experience required ({min_e:g} yrs) exceeds limit ({max_allowed:g} yrs)"
 
     if max_e is not None and max_e > max_allowed:
+        # If minimum required is within entry level (<= 1 yr) and max is at most 3 yrs,
+        # it is commonly phrased as '0-3 yrs' or '1-3 yrs' for junior positions open to 0-2 yrs
+        if min_e <= 1.0 and max_e <= 3.0:
+            return True, f"Junior / entry-level role ({min_e:g}-{max_e:g} yrs)"
         return False, f"Max experience required ({max_e:g} yrs) exceeds limit ({max_allowed:g} yrs)"
 
     return True, f"Matches 0-{max_allowed:g} yrs ({min_e:g}-{max_e:g} yrs)"
